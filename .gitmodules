@@ -1,0 +1,3 @@
+[submodule "oacd_core"]
+	path = oacd_core
+	url = https://github.com/dannaaduna/oacd_core.git
