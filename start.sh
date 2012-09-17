@@ -1,6 +1,7 @@
 #!/bin/bash
 
-RUNDIR=oarun
+BASEDIR="$( cd "$( dirname "$0" )" && pwd)"
+RUNDIR="$BASEDIR"/run
 DBDIR="$RUNDIR"/db
 LOGDIR="$RUNDIR"/log
 
@@ -8,7 +9,7 @@ KEY="$RUNDIR"/key
 SYSCONFIG="$RUNDIR"/etc/sys.config
 
 ERL=erl
-NAME="openacd@dnambp.local"
+NAME="openacd@127.0.0.1"
 COOKIE=oucxdevcookie
 
 mkdir -p "$RUNDIR"
@@ -43,4 +44,4 @@ if [ ! -f "$SYSCONFIG" ]; then
 EOF
 
 fi
-exec erl -pa oacd_core/ebin -pa deps/*/ebin -pa oacd_plugins/*/ebin -s openacd -config $SYSCONFIG
+exec erl -pa oacd_core/ebin -pa deps/*/ebin -pa oacd_plugins/*/ebin -s openacd -config $SYSCONFIG -name $NAME
