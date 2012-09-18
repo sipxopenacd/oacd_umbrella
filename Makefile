@@ -8,6 +8,9 @@ compile: generate_config
 	./rebar compile
 
 generate_config:
+	if [ ! -f enabled_plugins ]; then \
+		echo "[]." > enabled_plugins; \
+	fi
 	cat oacd_core/rebar.config.template | sed -e "s:@OACD_DEPS_DIR@:../deps:g" > oacd_core/rebar.config
 	for plugin in oacd_plugins/*; do \
 		if [ -f $$plugin/rebar.config.template ]; then \
