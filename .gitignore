@@ -3,3 +3,5 @@ deps/*
 erl_crash.dump
 oarun/*
 oacd_plugins/*
+Mnesia*
+run/*
