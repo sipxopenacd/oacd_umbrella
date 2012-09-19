@@ -37,6 +37,7 @@ if [ ! -f "$SYSCONFIG" ]; then
 	{nodes, ['$CONFIGNODENAME']}
 	, {console_loglevel, info}
 	, {logfiles, [{"$LOGDIR/openacd.log", debug}]}
+	, {plugins, `cat enabled_plugins | sed -e "s:\.$::g"`}
 ]},
 {sasl, [
 	{errlog_type, error} % disable SASL progress reports
