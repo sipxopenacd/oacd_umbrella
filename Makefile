@@ -14,26 +14,16 @@ OAPLUGINDIR=$(OADIR)/plugin.d
 
 all: deps compile
 
-deps: generate_config
+deps: setup
 	./rebar get-deps
 
-compile: generate_config
+compile: setup
 	./rebar compile
 
-generate_config:
+setup:
 	if [ ! -f enabled_plugins ]; then \
 		echo "[]." > enabled_plugins; \
 	fi
-	for core_app in core/*; do \
-		if [ -f $$core_app/rebar.config.template ]; then \
-			cat $$core_app/rebar.config.template | sed -e "s:@OACD_DEPS_DIR@:../../deps:g" > $$core_app/rebar.config; \
-		fi \
-	done
-	for plugin in oacd_plugins/*; do \
-		if [ -f $$plugin/rebar.config.template ]; then \
-			cat $$plugin/rebar.config.template | sed -e "s:@OACD_DEPS_DIR@:../../deps:g" > $$plugin/rebar.config; \
-		fi \
-	done
 
 install:
 	mkdir -p $(DESTDIR)$(PREFIX)$(BINDIR)
