@@ -8,6 +8,7 @@ BASEDIR="$( cd "$( dirname "$0" )" && pwd)"
 RUNDIR="$BASEDIR"/run
 DBDIR="$RUNDIR"/db
 LOGDIR="$RUNDIR"/log
+ENABLED_PLUGINS="$BASEDIR"/enabled_plugins
 
 KEY="$RUNDIR"/key
 SYSCONFIG="$RUNDIR"/etc/sys.config
@@ -39,7 +40,7 @@ if [ ! -f "$SYSCONFIG" ]; then
 	{nodes, ['$CONFIGNODENAME']}
 	, {console_loglevel, info}
 	, {logfiles, [{"$LOGDIR/openacd.log", debug}]}
-	, {plugins, `cat enabled_plugins | sed -e "s:\.$::g"`}
+	, {plugins, [`awk 'BEGIN{OFS=",";RS=""}{$1=$1}1' $ENABLED_PLUGINS`]}
 ]},
 {sasl, [
 	{errlog_type, error} % disable SASL progress reports

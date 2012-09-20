@@ -22,7 +22,7 @@ compile: setup
 
 setup:
 	if [ ! -f enabled_plugins ]; then \
-		echo "[]." > enabled_plugins; \
+		touch enabled_plugins; \
 	fi
 
 checkout:
