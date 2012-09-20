@@ -47,4 +47,4 @@ EOF
 fi
 
 ERL_LIBS="$BASEDIR"/deps:"$BASEDIR"/core:"$BASEDIR"/plugins:$ERL_LIBS
-exec erl -s openacd -config "$SYSCONFIG" -name "$NAME"
+exec erl -s openacd -config "$SYSCONFIG" -name "$NAME" -mnesia dir \""$DBDIR"\"
