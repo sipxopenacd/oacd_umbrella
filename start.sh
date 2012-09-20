@@ -45,4 +45,6 @@ if [ ! -f "$SYSCONFIG" ]; then
 EOF
 
 fi
-exec erl -pa oacd_core/ebin -pa deps/*/ebin -pa oacd_plugins/*/ebin -s openacd -config $SYSCONFIG -name $NAME
+
+ERL_LIBS="$BASEDIR"/deps:"$BASEDIR"/core:"$BASEDIR"/plugins:$ERL_LIBS
+exec erl -s openacd -config "$SYSCONFIG" -name "$NAME"
