@@ -12,6 +12,8 @@ LOGDIR="$RUNDIR"/log
 KEY="$RUNDIR"/key
 SYSCONFIG="$RUNDIR"/etc/sys.config
 
+export ERL_CRASH_DUMP="$LOGDIR"/erlang_crash.dump
+
 mkdir -p "$RUNDIR"
 mkdir -p "$DBDIR"
 mkdir -p "$LOGDIR"
