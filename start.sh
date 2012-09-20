@@ -1,5 +1,9 @@
 #!/bin/bash
 
+ERL=erl
+NAME="openacd@127.0.0.1"
+COOKIE=oucxdevcookie
+
 BASEDIR="$( cd "$( dirname "$0" )" && pwd)"
 RUNDIR="$BASEDIR"/run
 DBDIR="$RUNDIR"/db
@@ -7,10 +11,6 @@ LOGDIR="$RUNDIR"/log
 
 KEY="$RUNDIR"/key
 SYSCONFIG="$RUNDIR"/etc/sys.config
-
-ERL=erl
-NAME="openacd@127.0.0.1"
-COOKIE=oucxdevcookie
 
 mkdir -p "$RUNDIR"
 mkdir -p "$DBDIR"
