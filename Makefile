@@ -12,7 +12,7 @@ OALOGDIR=$(VARDIR)/log/openacd
 OADBDIR=$(OAVARDIR)/db
 OAPLUGINDIR=$(OADIR)/plugin.d
 
-all: deps compile
+all: checkout deps compile
 
 deps: setup
 	./rebar get-deps
@@ -22,8 +22,12 @@ compile: setup
 
 setup:
 	if [ ! -f enabled_plugins ]; then \
-		echo "[]." > enabled_plugins; \
+		touch enabled_plugins; \
 	fi
+
+checkout:
+	git submodule init
+	git submodule update
 
 install:
 	mkdir -p $(DESTDIR)$(PREFIX)$(BINDIR)
