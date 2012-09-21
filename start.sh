@@ -35,7 +35,7 @@ if [ ! -f "$SYSCONFIG" ]; then
 
 	CONFIGNODENAME=`erl -eval "io:format(\"~s\",[node()]),halt(1)" -name $NAME -noshell`
 	cat > "$SYSCONFIG" <<EOF
-[{'OpenACD', [
+[{'oacd_core', [
 	{nodes, ['$CONFIGNODENAME']}
 	, {console_loglevel, info}
 	, {logfiles, [{"$LOGDIR/openacd.log", debug}]}
