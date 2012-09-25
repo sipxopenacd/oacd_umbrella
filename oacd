@@ -1,8 +1,8 @@
 #!/bin/bash
 
 BASEDIR="$( cd "$( dirname "$0" )" && pwd)"
-PLUGINDIR=$BASEDIR/plugins
-ENABLED_PLUGINS_FILE=$BASEDIR/enabled_plugins
+PLUGINDIR="$BASEDIR/plugins"
+ENABLED_PLUGINS_FILE="$BASEDIR/enabled_plugins"
 
 ULON="\033[4m"
 ULOFF="\033[0m"
@@ -63,39 +63,39 @@ EOF
 
 add_plugin()
 {
-	PLUGIN=$1
-	PLUGIN_REPO=$2
-	PLUGIN_PATH=$PLUGINDIR/$PLUGIN
+	PLUGIN="$1"
+	PLUGIN_REPO="$2"
+	PLUGIN_PATH="$PLUGINDIR/$PLUGIN"
 	echo "Cloning $PLUGIN from $PLUGIN_REPO into $PLUGIN_PATH"
 
-	git clone $PLUGIN_REPO $PLUGINDIR/$PLUGIN
+	git clone "$PLUGIN_REPO" "$PLUGIN_PATH"
 }
 
 create_plugin()
 {
-	PLUGIN=$1
-	PLUGIN_PATH=$PLUGINDIR/$PLUGIN
+	PLUGIN="$1"
+	PLUGIN_PATH="$PLUGINDIR/$PLUGIN"
 	echo "Creating rebar app for $PLUGIN in $PLUGIN_PATH"
 
-	mkdir -p $PLUGIN_PATH
-	cd $PLUGIN_PATH
-	$BASEDIR/rebar create-app appid=$PLUGIN
+	mkdir -p "$PLUGIN_PATH"
+	cd "$PLUGIN_PATH"
+	$BASEDIR/rebar create-app appid="$PLUGIN"
 }
 
 enable_plugin()
 {
 	PLUGIN=$1
 	echo "Enabling $PLUGIN plugin"
-	echo $PLUGIN >> $ENABLED_PLUGINS_FILE
+	echo "$PLUGIN" >> "$ENABLED_PLUGINS_FILE"
 }
 
 disable_plugin()
 {
-	PLUGIN=$1
+	PLUGIN="$1"
 	echo "Disabling $PLUGIN plugin"
 
-	grep -v "^$PLUGIN$" $ENABLED_PLUGINS_FILE > $ENABLED_PLUGINS_FILE.tmp
-	mv $ENABLED_PLUGINS_FILE.tmp $ENABLED_PLUGINS_FILE
+	grep -v "^$PLUGIN$" "$ENABLED_PLUGINS_FILE" > "$ENABLED_PLUGINS_FILE.tmp"
+	mv "$ENABLED_PLUGINS_FILE.tmp" "$ENABLED_PLUGINS_FILE"
 }
 
 usage()
