@@ -73,6 +73,10 @@ add_plugin()
 
 create_plugin()
 {
+	if [ "$#" -lt 1 ]; then
+		err_exit "missing name operand"
+	fi
+
 	PLUGIN="$1"
 	PLUGIN_PATH="$PLUGINDIR/$PLUGIN"
 	echo "Creating rebar app for $PLUGIN in $PLUGIN_PATH"
@@ -84,13 +88,21 @@ create_plugin()
 
 enable_plugin()
 {
-	PLUGIN=$1
+	if [ "$#" -lt 1 ]; then
+		err_exit "missing name operand"
+	fi
+
+	PLUGIN="$1"
 	echo "Enabling $PLUGIN plugin"
 	echo "$PLUGIN" >> "$ENABLED_PLUGINS_FILE"
 }
 
 disable_plugin()
 {
+	if [ "$#" -lt 1 ]; then
+		err_exit "missing name operand"
+	fi
+
 	PLUGIN="$1"
 	echo "Disabling $PLUGIN plugin"
 
@@ -111,11 +123,21 @@ usage()
 	echo ""
 }
 
-case $1 in
-    'add-plugin') add_plugin $2 $3;;
-	'create-plugin') create_plugin $2;;
-	'enable-plugin') enable_plugin $2;;
-	'disable-plugin') disable_plugin $2;;
+err_exit()
+{
+	echo "oacd: $*"
+	exit 1
+}
+
+CMD="$1"
+shift
+case "$CMD" in
+	'add-plugin') add_plugin $*;;
+	'create-plugin') create_plugin $*;;
+	'enable-plugin') enable_plugin $*;;
+	'disable-plugin') disable_plugin $*;;
 	'start') start;;
 	*) usage;;
 esac
+
+
