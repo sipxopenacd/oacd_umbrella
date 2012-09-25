@@ -41,7 +41,7 @@ install:
 	  ./install.sh $$dep $(DESTDIR)$(PREFIX)$(OALIBDIR) ; \
 	done
 	./install.sh . $(DESTDIR)$(PREFIX)$(OALIBDIR)
-	for app in ./oacd_plugins/*; do \
+	for app in ./plugins/*; do \
 	  ./install.sh $$app $(DESTDIR)$(PREFIX)$(OALIBDIR) ; \
 	done
 ## Plug-ins

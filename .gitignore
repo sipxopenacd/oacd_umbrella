@@ -2,6 +2,6 @@ enabled_plugins
 deps/*
 erl_crash.dump
 oarun/*
-oacd_plugins/*
+plugins/*
 Mnesia*
 run/*
