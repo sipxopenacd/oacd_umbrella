@@ -58,7 +58,7 @@ EOF
 	fi
 
 	export ERL_LIBS="$BASEDIR"/deps:"$BASEDIR"/core:"$BASEDIR"/oacd_plugins:$ERL_LIBS
-	exec erl -s openacd -config "$SYSCONFIG" -name "$NAME" -mnesia dir \""$DBDIR"\"
+	exec erl -s openacd -config "$SYSCONFIG" -name "$NAME" -setcookie $COOKIE -mnesia dir \""$DBDIR"\"
 }
 
 add_plugin()
@@ -111,7 +111,7 @@ usage()
 	echo ""
 }
 
-case $* in
+case $1 in
     'add-plugin') add_plugin $2 $3;;
 	'create-plugin') create_plugin $2;;
 	'enable-plugin') enable_plugin $2;;
