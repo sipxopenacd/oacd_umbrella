@@ -1,2 +1,2 @@
-{lib_dirs, ["../../deps", "../../core", "../../oacd_plugins"]}.
+{lib_dirs, ["../../deps", "../../core", "../../plugins"]}.
 {deps_dir, ["../../deps"]}.
