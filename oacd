@@ -66,6 +66,13 @@ EOF
 
 add_plugin()
 {
+	if [ "$#" -lt 1 ]; then
+		err_exit "missing name and git-repo operand"
+	fi
+	if [ "$#" -lt 2 ]; then
+		err_exit "missing git-repo operand"
+	fi
+
 	PLUGIN="$1"
 	PLUGIN_REPO="$2"
 	PLUGIN_PATH="$PLUGINDIR/$PLUGIN"
@@ -121,8 +128,6 @@ usage()
 	echo ""
 	echo -e "  add-plugin ${ULON}name${ULOFF} ${ULON}git-repo${ULOFF}"
 	echo -e "  create-plugin ${ULON}name${ULOFF}"
-	echo -e "  disable-plugin ${ULON}name${ULOFF}"
-	echo -e "  enable-plugin ${ULON}name${ULOFF}"
 	echo ""
 }
 
