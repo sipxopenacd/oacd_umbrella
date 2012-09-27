@@ -5,3 +5,4 @@ oarun/*
 plugins/*
 Mnesia*
 run/*
+oacd.cfg

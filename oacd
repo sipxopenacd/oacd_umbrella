@@ -3,6 +3,7 @@
 BASEDIR="$( cd "$( dirname "$0" )" && pwd)"
 PLUGINDIR="$BASEDIR/plugins"
 ENABLED_PLUGINS_FILE="$BASEDIR/enabled_plugins"
+OACD_SCRIPT_CONFIG="$BASEDIR/oacd.cfg"
 
 ULON="\033[4m"
 ULOFF="\033[0m"
@@ -11,7 +12,7 @@ start()
 {
 	ERL=erl
 	NAME="openacd@127.0.0.1"
-	COOKIE=oucxdevcookie
+	COOKIE="oucxdevcookie"
 
 	RUNDIR="$BASEDIR"/run
 	DBDIR="$RUNDIR"/db
@@ -28,6 +29,9 @@ start()
 
 	export OPENACD_RUN_DIR="$RUNDIR"
 
+	if [ -f "$OACD_SCRIPT_CONFIG" ]; then
+	    . "$OACD_SCRIPT_CONFIG"
+	fi
 	if [ ! -f "$KEY" ]; then
 		echo "RSA key does not exist, generating..."
 		ssh-keygen -t rsa -f "$KEY" -N ""

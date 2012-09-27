@@ -1,0 +1,4 @@
+#!/bin/bash
+
+NAME="openacd@oucxdev.ezuce.com"
+COOKIE="oucxdevcookie"
