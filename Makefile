@@ -20,12 +20,9 @@ deps:
 compile:
 	./rebar compile
 
-setup:
-	if [ ! -f enabled_plugins ]; then \
-		touch enabled_plugins; \
-	fi
+checkout: core/oacd_core
 
-checkout:
+core/oacd_core:
 	git submodule init
 	git submodule update
 
