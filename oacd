@@ -16,7 +16,6 @@ start()
 	RUNDIR="$BASEDIR"/run
 	DBDIR="$RUNDIR"/db
 	LOGDIR="$RUNDIR"/log
-	ENABLED_PLUGINS="$BASEDIR"/enabled_plugins
 
 	KEY="$RUNDIR"/key
 	SYSCONFIG="$RUNDIR"/etc/sys.config
@@ -48,7 +47,7 @@ start()
 	{nodes, ['$CONFIGNODENAME']}
 	, {console_loglevel, info}
 	, {logfiles, [{"$LOGDIR/openacd.log", debug}]}
-	, {plugins, [`awk 'BEGIN{OFS=",";RS=""}{$1=$1}1' $ENABLED_PLUGINS`]}
+	, {plugins, []}
 ]},
 {sasl, [
 	{errlog_type, error} % disable SASL progress reports

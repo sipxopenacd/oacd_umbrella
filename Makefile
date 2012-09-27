@@ -14,10 +14,10 @@ OAPLUGINDIR=$(OADIR)/plugin.d
 
 all: checkout deps compile
 
-deps: setup
+deps:
 	./rebar get-deps
 
-compile: setup
+compile:
 	./rebar compile
 
 setup:
