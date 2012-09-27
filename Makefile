@@ -20,9 +20,9 @@ deps:
 compile:
 	./rebar compile
 
-checkout: core/oacd_core
+checkout: core/oacd_core/src
 
-core/oacd_core:
+core/oacd_core/src:
 	git submodule init
 	git submodule update
 
