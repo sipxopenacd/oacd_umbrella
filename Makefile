@@ -68,3 +68,6 @@ install:
 	cd $(DESTDIR)$(PREFIX)$(BINDIR); \
 	ln -sf $(PREFIX)$(OABINDIR)/openacd openacd; \
 	ln -sf $(PREFIX)$(OABINDIR)/nodetool nodetool
+
+.PHONY: all deps compile checkout install
+
