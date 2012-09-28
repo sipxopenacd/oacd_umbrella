@@ -3,6 +3,8 @@ ETCDIR=test/etc
 LIBDIR=test/lib
 VARDIR=test/var
 
+BASEDIR=.
+
 OADIR=$(LIBDIR)/openacd
 OALIBDIR=$(OADIR)/lib
 OABINDIR=$(OADIR)/bin
@@ -12,6 +14,9 @@ OALOGDIR=$(VARDIR)/log/openacd
 OADBDIR=$(OAVARDIR)/db
 OAPLUGINDIR=$(OADIR)/plugin.d
 
+CORE_GIT=git@github.com:dannaaduna/oacd_core.git
+CORE_DIR=$(BASEDIR)/core/oacd_core
+
 all: checkout deps compile
 
 deps:
@@ -20,11 +25,10 @@ deps:
 compile:
 	./rebar compile
 
-checkout: core/oacd_core/src
+checkout: core/oacd_core
 
-core/oacd_core/src:
-	git submodule init
-	git submodule update
+core/oacd_core:
+	git clone --recursive "$(CORE_GIT)" "$(CORE_DIR)"
 
 install:
 	mkdir -p $(DESTDIR)$(PREFIX)$(BINDIR)
