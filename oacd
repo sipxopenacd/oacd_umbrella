@@ -3,7 +3,9 @@
 BASEDIR="$( cd "$( dirname "$0" )" && pwd)"
 PLUGINDIR="$BASEDIR/plugins"
 ENABLED_PLUGINS_FILE="$BASEDIR/enabled_plugins"
-OACD_SCRIPT_CONFIG="$BASEDIR/oacd.cfg"
+CONFDIR="$BASEDIR/conf"
+OACD_SCRIPT_CONFIG="$CONFDIR/oacd.cfg"
+OACD_APP_CONFIG="$CONFDIR/sys.config"
 
 ULON="\033[4m"
 ULOFF="\033[0m"
@@ -11,6 +13,7 @@ ULOFF="\033[0m"
 start()
 {
 	ERL=erl
+	NAMETYPE="-name"
 	NAME="openacd@127.0.0.1"
 	COOKIE="oucxdevcookie"
 
@@ -44,24 +47,24 @@ start()
 
 	if [ ! -f "$SYSCONFIG" ]; then
 		mkdir -p `dirname $SYSCONFIG`
+		ln -sf "$OACD_APP_CONFIG" "$SYSCONFIG"
 
-		CONFIGNODENAME=`erl -eval "io:format(\"~s\",[node()]),halt(1)" -name $NAME -noshell`
-		cat > "$SYSCONFIG" <<EOF
-[{'oacd_core', [
-	{nodes, ['$CONFIGNODENAME']}
-	, {console_loglevel, info}
-	, {logfiles, [{"$LOGDIR/openacd.log", debug}]}
-	, {plugins, []}
-]},
-{sasl, [
-	{errlog_type, error} % disable SASL progress reports
-]}].
-EOF
-
+# 		CONFIGNODENAME=`erl -eval "io:format(\"~s\",[node()]),halt(1)" -name $NAME -noshell`
+# 		cat > "$SYSCONFIG" <<EOF
+# [{'oacd_core', [
+# 	{nodes, ['$CONFIGNODENAME']}
+# 	, {console_loglevel, info}
+# 	, {logfiles, [{"$LOGDIR/openacd.log", debug}]}
+# 	, {plugins, []}
+# ]},
+# {sasl, [
+# 	{errlog_type, error} % disable SASL progress reports
+# ]}].
+# EOF
 	fi
 
 	export ERL_LIBS="$BASEDIR"/deps:"$BASEDIR"/core:"$BASEDIR"/plugins:$ERL_LIBS
-	exec erl -s openacd -config "$SYSCONFIG" -name "$NAME" -setcookie $COOKIE -mnesia dir \""$DBDIR"\"
+	exec erl -s openacd -config "$SYSCONFIG" "$NAMETYPE" "$NAME" -setcookie $COOKIE -mnesia dir \""$DBDIR"\"
 }
 
 add_plugin()
