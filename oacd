@@ -81,7 +81,7 @@ add_plugin()
 	PLUGIN_PATH="$PLUGINDIR/$PLUGIN"
 	echo "Cloning $PLUGIN from $PLUGIN_REPO into $PLUGIN_PATH"
 
-	git clone "$PLUGIN_REPO" "$PLUGIN_PATH"
+	git clone "$PLUGIN_REPO" "$PLUGIN_PATH" ${@:3:$#}
 }
 
 create_plugin()
