@@ -14,7 +14,7 @@ OALOGDIR=$(VARDIR)/log/openacd
 OADBDIR=$(OAVARDIR)/db
 OAPLUGINDIR=$(OADIR)/plugin.d
 
-CORE_GIT=git@github.com:dannaaduna/oacd_core.git
+CORE_GIT=git@github.com:sipxopenacd/oacd_core.git
 CORE_DIR=$(BASEDIR)/core/oacd_core
 
 all: checkout deps compile
