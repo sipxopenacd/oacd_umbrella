@@ -17,7 +17,7 @@ OAPLUGINDIR=$(OADIR)/plugin.d
 CORE_GIT=git@github.com:sipxopenacd/oacd_core.git
 CORE_DIR=$(BASEDIR)/core/oacd_core
 
-all: checkout deps compile
+all: checkout deps update compile
 
 deps:
 	./rebar get-deps
@@ -26,6 +26,11 @@ compile:
 	./rebar compile
 
 checkout: core/oacd_core
+
+update:
+	git pull
+	$(foreach plugin,$(wildcard core/* plugins/*),cd $(plugin) && git pull; cd - ;)
+	./rebar update-deps
 
 core/oacd_core:
 	git clone --recursive "$(CORE_GIT)" "$(CORE_DIR)"
@@ -70,5 +75,5 @@ install:
 	ln -sf $(PREFIX)$(OABINDIR)/openacd openacd; \
 	ln -sf $(PREFIX)$(OABINDIR)/nodetool nodetool
 
-.PHONY: all deps compile checkout install
+.PHONY: all deps compile checkout install update
 
