@@ -17,6 +17,15 @@ OAPLUGINDIR=$(OADIR)/plugin.d
 CORE_GIT=git@github.com:sipxopenacd/oacd_core.git
 CORE_DIR=$(BASEDIR)/core/oacd_core
 
+DISTDIR=dist
+DISTLIBDIR=$(DISTDIR)/lib/openacd
+DISTLIBDIR=$(DISTDIR)/lib/openacd
+DISTBINDIR=$(DISTDIR)/lib/openacd/bin
+DISTETCDIR=$(DISTDIR)/etc/openacd
+DISTLOGDIR=$(DISTDIR)/var/log/openacd
+SCRIPTSTPLDIR=templates/scripts
+CONFTPLDIR=templates/conf
+
 all: checkout deps update compile
 
 deps:
@@ -75,5 +84,28 @@ install:
 	ln -sf $(PREFIX)$(OABINDIR)/openacd openacd; \
 	ln -sf $(PREFIX)$(OABINDIR)/nodetool nodetool
 
-.PHONY: all deps compile checkout install update
+dist:
+	rm -rf $(DISTDIR)
+	mkdir -p $(DISTDIR)
+
+	mkdir -p $(DISTLIBDIR)/core
+	mkdir -p $(DISTLIBDIR)/core/oacd_core
+	cp -r core/oacd_core/ebin $(DISTLIBDIR)/core/ebin
+	cp -r core/oacd_core/include $(DISTLIBDIR)/core/include
+	mkdir -p $(DISTLIBDIR)/plugins
+
+	mkdir -p $(DISTBINDIR)
+	cat $(SCRIPTSTPLDIR)/openacd > $(DISTBINDIR)/openacd
+	cat $(SCRIPTSTPLDIR)/nodetool > $(DISTBINDIR)/nodetool
+	chmod +x $(DISTBINDIR)/openacd
+	chmod +x $(DISTBINDIR)/nodetool
+
+	mkdir -p $(DISTETCDIR)
+	cat $(CONFTPLDIR)/sys.config > $(DISTETCDIR)/sys.config
+	cat $(CONFTPLDIR)/env.config > $(DISTETCDIR)/env.config
+	chmod +x $(DISTETCDIR)/env.config
+
+	mkdir -p $(DISTLOGDIR)
+
+.PHONY: all deps compile checkout install update dist
 
