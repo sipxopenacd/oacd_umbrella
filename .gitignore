@@ -7,3 +7,5 @@ plugins/*
 Mnesia*
 run/*
 oacd.cfg
+.DS_Store
+dist/*
