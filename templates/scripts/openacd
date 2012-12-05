@@ -22,7 +22,7 @@ ERL_HOST=$(hostname -f)
 ERL_COOKIE=
 
 # other vm args
-ERL_ARGS=
+# ERL_ARGS=
 
 # pipe dir - must end with '/'
 PIPE_DIR=/tmp/openacd/
@@ -36,8 +36,6 @@ LIB_DIR=%LIB_DIR%
 OA_LIB_DIR=$LIB_DIR/openacd
 OA_ETC_DIR=$ETC_DIR/openacd
 
-OA_LOG_DIR=$VAR_DIR/log/openacd
-OA_DB_DIR=$VAR_DIR/openacd/db
 OA_CORE_DIR=$LIB_DIR/openacd/core
 OA_PLUGIN_DIR=$LIB_DIR/openacd/plugins
 
@@ -47,27 +45,37 @@ while [ "$#" -ne 0 ]; do
     shift
     case $PARAM in
         --) break ;;
-        --config-dir) OA_ETC_DIR=$1 ; shift ;;
         --env-config) OA_ENV_CONFIG_PATH=$1 ; shift ;;
         --config) OA_CONFIG_CTL_PATH=$1 ; shift ;;
+        --name) ERL_NAME=$1 ; shift ;;
+        --logs) OA_LOG_DIR=$1 ; shift ;;
         *) ARGS="$ARGS $PARAM" ;;
     esac
 done
 
-# paths
-: ${OA_ENV_CONFIG_PATH:=$OA_ETC_DIR/env.config}
-: ${OA_CONFIG_PATH:=$OA_ETC_DIR/sys.config}
 
 # run env config
 [ -f "$OA_ENV_CONFIG_PATH" ] && . "$OA_ENV_CONFIG_PATH"
 
-# command line config path overrides
-if [ ! -z "$OA_CONFIG_CTL_PATH" ]; then
+# defaults
+: ${OA_CONFIG_PATH:=$OA_ETC_DIR/sys.config}
+: ${OA_LOG_DIR:=$VAR_DIR/log/openacd}
+: ${OA_DB_DIR:=$VAR_DIR/openacd/db}
+
+# override if defined as arg
+if [ -z "$OA_CONFIG_CTL_PATH" ]; then
     OA_CONFIG_PATH=$OA_CONFIG_CTL_PATH
 fi
 
 # name
-: ${ERL_NAME:=$ERL_NODE@$ERL_HOST}
+if [ -z "$ERL_NAME" ]; then
+    ERL_NAME=$ERL_NODE@$ERL_HOST
+elif [ "$ERL_NAME" != ${ERL_NAME%@*} ]; then
+    ERL_NAME=$ERL_NAME@$ERL_HOST
+else
+    ERL_HOST=${ERL_NAME%@*}
+fi
+
 ERL_NAME_TYPE=-name
 # long or short names
 if [ "$ERL_HOST" = "${ERL_HOST%.*}" ]; then
@@ -105,6 +113,7 @@ cd $HOME
 export HOME
 export ERL_CRASH_DUMP
 export ERL_LIBS
+export OA_PID_PATH
 
 # set-up nodetool
 NODETOOL_PATH=$OA_LIB_DIR/bin/nodetool
@@ -122,11 +131,6 @@ START_CMD="$ERL \
     -mnesia dir \"\\\"$OA_DB_DIR\\\"\"
     -detached \
     $ERL_OPTS"
-
-status ()
-{
-    echo "status"
-}
 
 start()
 {
@@ -157,10 +161,17 @@ live()
     exec $ERL_CMD
 }
 
-usage()
+ctl()
 {
-    echo "Usage: $0 start|live|status|stop"
-    exit
+    CTL_NAME="oacdctl_$$@$ERL_HOST"
+    CTL_NAME_ARG="$ERL_NAME_TYPE $CTL_NAME"
+
+    exec $ERL \
+        $CTL_NAME_ARG \
+        -s oacd_ctl \
+        -noinput \
+        -hidden \
+        -extra $ERL_NAME $ARGS $@
 }
 
 checkdupname()
@@ -176,16 +187,16 @@ checkdupname()
 checkstorage()
 {
     $ERL 1> /dev/null <<EOF
-Exit = try
-    {ok, [P]} = file:consult("$OA_CONFIG_PATH"),
-    C = proplists:get_value(oacd_core, P),
-    true = (proplists:get_value(agent_auth_storage, C) =/= undefined),
-    true = (proplists:get_value(call_queue_config_storage, C) =/= undefined),
-    0
-catch _:_ ->
-    1
-end,
-halt(Exit).
+        Exit = try
+            {ok, [P]} = file:consult("$OA_CONFIG_PATH"),
+            C = proplists:get_value(oacd_core, P),
+            true = (proplists:get_value(agent_auth_storage, C) =/= undefined),
+            true = (proplists:get_value(call_queue_config_storage, C) =/= undefined),
+            0
+        catch _:_ ->
+            1
+        end,
+        halt(Exit).
 EOF
     if [ "$?" -eq 1 ]; then
         echo "ERROR: agent_auth_storage and call_queue_storage must be defined in \"$OA_CONFIG_PATH\""
@@ -197,7 +208,7 @@ case $ARGS in
     ' status' ) start ;;
     ' start' ) start ;;
     ' live' ) live ;;
-    * ) usage ;;
+    * ) ctl ;;
 esac
 
 exit 0
