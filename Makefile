@@ -16,10 +16,10 @@ CORE_DIR=$(BASEDIR)/core/oacd_core
 all: checkout deps update compile
 
 deps:
-	./rebar get-deps
+	@rebar get-deps
 
 compile:
-	./rebar compile
+	@rebar compile
 
 checkout: core/oacd_core
 
