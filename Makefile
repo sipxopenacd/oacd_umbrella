@@ -10,7 +10,7 @@ RUNNER_USER=
 
 BASEDIR=.
 
-CORE_GIT=git@github.com:sipxopenacd/oacd_core.git
+CORE_GIT=https://github.com/sipxopenacd/oacd_core.git
 CORE_DIR=$(BASEDIR)/core/oacd_core
 
 all: checkout deps update compile
