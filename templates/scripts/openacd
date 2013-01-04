@@ -123,19 +123,9 @@ NODETOOL="$ESCRIPT $NODETOOL_PATH"
 REMSH_NAME_ARG="$REMSH_TYPE remsh`date +%s`@`echo $REMSH_NAME | awk -F@ '{print $2}'`"
 REMSH_REMSH_ARG="-remsh $REMSH_NAME"
 
-START_CMD="$ERL \
-    $ERL_NAME_ARG \
-    $ERL_COOKIE_ARG \
-    -s openacd \
-    -config $OA_CONFIG_PATH \
-    -mnesia dir \"\\\"$OA_DB_DIR\\\"\"
-    -detached \
-    $ERL_OPTS"
-
 start()
 {
     checkdupname
-    checkstorage
 
     ERL_CMD="$ERL \
         $ERL_NAME_ARG \
@@ -150,11 +140,11 @@ start()
 live()
 {
     checkdupname
-    checkstorage
 
     ERL_CMD="$ERL \
         $ERL_NAME_ARG \
         $ERL_COOKIE_ARG \
+        -s openacd \
         -config $OA_CONFIG_PATH \
         -mnesia dir \"$OA_DB_DIR\"\
         $ERL_OPTS"
@@ -180,26 +170,6 @@ checkdupname()
         grep -c duplicate_name > /dev/null
     if [ "$?" -eq 0 ]; then
         echo "ERROR: Duplicate node name '$ERL_NAME' already running."
-        exit 1
-    fi
-}
-
-checkstorage()
-{
-    $ERL 1> /dev/null <<EOF
-        Exit = try
-            {ok, [P]} = file:consult("$OA_CONFIG_PATH"),
-            C = proplists:get_value(oacd_core, P),
-            true = (proplists:get_value(agent_auth_storage, C) =/= undefined),
-            true = (proplists:get_value(call_queue_config_storage, C) =/= undefined),
-            0
-        catch _:_ ->
-            1
-        end,
-        halt(Exit).
-EOF
-    if [ "$?" -eq 1 ]; then
-        echo "ERROR: agent_auth_storage and call_queue_storage must be defined in \"$OA_CONFIG_PATH\""
         exit 1
     fi
 }
