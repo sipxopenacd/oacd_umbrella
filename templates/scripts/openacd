@@ -115,6 +115,7 @@ export HOME
 export ERL_CRASH_DUMP
 export ERL_LIBS
 export OA_PID_PATH
+export OA_RUN_DIR
 
 # set-up nodetool
 NODETOOL_PATH=$OA_LIB_DIR/bin/nodetool
