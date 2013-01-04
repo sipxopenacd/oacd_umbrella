@@ -39,6 +39,12 @@ OA_ETC_DIR=$ETC_DIR/openacd
 OA_CORE_DIR=$LIB_DIR/openacd/core
 OA_PLUGIN_DIR=$LIB_DIR/openacd/plugins
 
+# defaults
+OA_CONFIG_PATH=$OA_ETC_DIR/sys.config
+OA_LOG_DIR=$VAR_DIR/log/openacd
+OA_DB_DIR=$VAR_DIR/openacd/db
+OA_RUN_DIR=$VAR_DIR/openacd/run
+
 ARGS=
 while [ "$#" -ne 0 ]; do
     PARAM=$1
@@ -53,14 +59,9 @@ while [ "$#" -ne 0 ]; do
     esac
 done
 
-
 # run env config
 [ -f "$OA_ENV_CONFIG_PATH" ] && . "$OA_ENV_CONFIG_PATH"
 
-# defaults
-: ${OA_CONFIG_PATH:=$OA_ETC_DIR/sys.config}
-: ${OA_LOG_DIR:=$VAR_DIR/log/openacd}
-: ${OA_DB_DIR:=$VAR_DIR/openacd/db}
 
 # override if defined as arg
 if [ ! -z "$OA_CONFIG_CTL_PATH" ]; then
