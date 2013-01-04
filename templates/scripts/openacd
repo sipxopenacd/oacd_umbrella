@@ -135,6 +135,7 @@ start()
         -mnesia dir \"$OA_DB_DIR\"\
         -detached \
         $ERL_OPTS"
+    exec $ERL_CMD
 }
 
 live()
