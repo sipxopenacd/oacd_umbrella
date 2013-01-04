@@ -7,6 +7,9 @@ CONFDIR="$BASEDIR/conf"
 OACD_SCRIPT_CONFIG="$CONFDIR/oacd.cfg"
 OACD_APP_CONFIG="$CONFDIR/sys.config"
 
+OACD_SCRIPT_CONFIG_EXAMPLE="$CONFDIR/oacd.cfg.example"
+OACD_APP_CONFIG_EXAMPLE="$CONFDIR/sys.config.example"
+
 ULON="\033[4m"
 ULOFF="\033[0m"
 
@@ -31,6 +34,14 @@ start()
 	mkdir -p "$LOGDIR"
 
 	export OPENACD_RUN_DIR="$RUNDIR"
+
+	if [ ! -f "$OACD_SCRIPT_CONFIG" ] && [ -f "$OACD_SCRIPT_CONFIG_EXAMPLE" ]; then
+		cp "$OACD_SCRIPT_CONFIG_EXAMPLE" "$OACD_SCRIPT_CONFIG"
+	fi
+	if [ ! -f "$OACD_APP_CONFIG" ] && [ -f "$OACD_APP_CONFIG_EXAMPLE" ]; then
+		cp "$OACD_APP_CONFIG_EXAMPLE" "$OACD_APP_CONFIG"
+	fi
+
 
 	if [ -f "$OACD_SCRIPT_CONFIG" ]; then
 	    . "$OACD_SCRIPT_CONFIG"

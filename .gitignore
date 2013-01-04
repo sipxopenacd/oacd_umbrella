@@ -9,3 +9,5 @@ run/*
 oacd.cfg
 .DS_Store
 dist/*
+conf/oacd.cfg
+conf/sys.config
