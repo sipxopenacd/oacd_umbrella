@@ -63,7 +63,7 @@ done
 : ${OA_DB_DIR:=$VAR_DIR/openacd/db}
 
 # override if defined as arg
-if [ -z "$OA_CONFIG_CTL_PATH" ]; then
+if [ ! -z "$OA_CONFIG_CTL_PATH" ]; then
     OA_CONFIG_PATH=$OA_CONFIG_CTL_PATH
 fi
 
