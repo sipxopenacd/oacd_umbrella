@@ -30,7 +30,7 @@ start()
 	mkdir -p "$DBDIR"
 	mkdir -p "$LOGDIR"
 
-	export OPENACD_RUN_DIR="$RUNDIR"
+	export OA_RUN_DIR="$RUNDIR"
 
 	if [ -f "$OACD_SCRIPT_CONFIG" ]; then
 	    . "$OACD_SCRIPT_CONFIG"
