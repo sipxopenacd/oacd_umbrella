@@ -7,3 +7,4 @@ plugins/*
 Mnesia*
 run/*
 oacd.cfg
+user_default.beam

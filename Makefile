@@ -17,7 +17,7 @@ OAPLUGINDIR=$(OADIR)/plugin.d
 CORE_GIT=git@github.com:sipxopenacd/openacd.git
 CORE_DIR=$(BASEDIR)/core/openacd
 
-all: checkout deps update compile
+all: checkout deps update compile utils
 
 deps:
 	./rebar get-deps
@@ -34,6 +34,12 @@ update:
 
 core/openacd:
 	git clone "$(CORE_GIT)" "$(CORE_DIR)"
+
+utils: user_default.beam
+
+user_default.beam: core/openacd user_default.erl
+	# added to home so that it will be included in path
+	erlc -o . -I core/openacd/include user_default.erl
 
 install:
 	mkdir -p $(DESTDIR)$(PREFIX)$(BINDIR)
@@ -75,5 +81,5 @@ install:
 	ln -sf $(PREFIX)$(OABINDIR)/openacd openacd; \
 	ln -sf $(PREFIX)$(OABINDIR)/nodetool nodetool
 
-.PHONY: all deps compile checkout install update
+.PHONY: all deps compile checkout install update utils
 
